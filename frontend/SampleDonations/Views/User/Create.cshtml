@@ -1,0 +1,50 @@
+﻿@model UserDto
+
+@{
+    Layout = "_LayoutModal";
+}
+
+<h1>Adicionar Novo Usuário</h1>
+
+<form asp-action="Create" method="post" class="form-horizontal">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Nome:</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">Senha:</label>
+        <input asp-for="Password" class="form-control" type="password" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">Email:</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Cpf" class="control-label">Cpf:</label>
+        <input asp-for="Cpf" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Photo" class="control-label">Foto:</label>
+        <input asp-for="Photo" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfBirth" class="control-label">Data de Nascimento:</label>
+        <input asp-for="DateOfBirth" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="UserPermissionType" class="control-label">Permissão:</label>
+        <select asp-for="UserPermissionType" class="form-control">
+            @foreach (var item in Enum.GetValues(typeof(UserPermissionTypeEnum)))
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <input type="button" value="Cancelar" data-bs-dismiss="modal" class="btn btn-danger" />
+    </div>
+</form>

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ReceiveDto>
+
+<h1>Lista de Alimentos</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Quantidade</th>
+            <th>Validade</th>
+            <th>Data de Recebimento</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var receive in Model)
+        {
+            <tr>
+                <td>@receive.Id</td>
+                <td>@receive.Name</td>
+                <td>@receive.TypeOfDonation</td>
+                <td>@receive.Quantity</td>
+                <td>@receive.Validity.ToShortDateString()</td>
+                <td>@receive.DateTimeReceipt.ToString("g")</td>
+                <td>
+                    <button onclick="showInPopup('@Url.Action("Edit", new { id = receive.Id })','Editar Alimento')" type="button" class="btn btn-success">Editar</button>
+                    <a href="@Url.Action("Delete", new { id = receive.Id })" class="btn btn-danger">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button onclick="showInPopup('@Url.Action("Create")','Cadastrar Alimento')" type="button" class="btn btn-success">Cadastrar</button>

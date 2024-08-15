@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SendDto>
+
+<h1>Lista de Doações</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Id Produto</th>
+            <th>Id Usuario</th>
+            <th>Quantidade</th>
+            <th>Data Doação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var send in Model)
+        {
+            <tr>
+                <td>@send.Id</td>
+                <td>@send.IdProduct</td>
+                <td>@send.IdUser</td>
+                <td>@send.Quantity</td>
+                <td>@send.DateTimeDonation.ToShortDateString()</td>
+                <td>
+                    <button onclick="showInPopup('@Url.Action("Edit", new { id = send.Id })','Editar Doação')" type="button" class="btn btn-success">Editar</button>
+                    <a href="@Url.Action("Delete", new { id = send.Id })" class="btn btn-danger">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button onclick="showInPopup('@Url.Action("Create")','Efetuar nova doação')" type="button" class="btn btn-success">Efetuar nova doação</button>

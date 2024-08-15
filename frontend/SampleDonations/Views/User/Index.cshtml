@@ -1,0 +1,38 @@
+﻿@model IEnumerable<UserDto>
+
+<h1>Lista de Usuários</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cpf</th>
+            <th>Foto</th>
+            <th>Data de Nascimento</th>
+            <th>Permissão</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>@user.Cpf</td>
+                <td>@user.Photo</td>
+                <td>@user.Cpf</td>
+                <td>@user.DateOfBirth.ToShortDateString()</td>
+                <td>@user.UserPermissionType</td>
+                <td>
+                    <button onclick="showInPopup('@Url.Action("Edit", new { id = user.Id })','Editar Usuário')" type="button" class="btn btn-success">Editar</button>
+                    <a href="@Url.Action("Delete", new { id = user.Id })" class="btn btn-danger">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button onclick="showInPopup('@Url.Action("Create")','Cadastrar Alimento')" type="button" class="btn btn-success">Adicionar Novo Usuário</button>
