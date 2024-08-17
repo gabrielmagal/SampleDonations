@@ -10,9 +10,9 @@ namespace Sample.Models
         public string? Email { get; set; }
         public string? Cpf { get; set; }
         public string? Photo { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public UserPermissionTypeEnum UserPermissionType { get; set; }
+        public UserPermissionTypeEnum? UserPermissionTypeEnum { get; set; } = null;
     }
 }

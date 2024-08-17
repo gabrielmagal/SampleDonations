@@ -20,9 +20,9 @@ namespace Sample.Controllers
 
             if (tokenResponse != null)
             {
-                HttpContext.Response.Cookies.Append("AccessToken", tokenResponse.access_token, new CookieOptions { HttpOnly = true, Secure = true });
-                HttpContext.Response.Cookies.Append("RefreshToken", tokenResponse.refresh_token, new CookieOptions { HttpOnly = true, Secure = true });
-                HttpContext.Response.Cookies.Append("X-Tenant", realm, new CookieOptions { HttpOnly = true, Secure = true });
+                HttpContext.Session.SetString("AccessToken", tokenResponse.access_token);
+                HttpContext.Session.SetString("RefreshToken", tokenResponse.access_token);
+                HttpContext.Session.SetString("X-Tenant", realm);
                 ViewBag.Error = "Sucesso.";
                 return View();
             }
@@ -33,7 +33,7 @@ namespace Sample.Controllers
             }
         }
 
-        private async Task<TokenResponse> GetTokenAsync(string username, string password, string realm)
+        private async Task<TokenResponse?> GetTokenAsync(string username, string password, string realm)
         {
             var keycloakUrl = $"http://localhost:8083/realms/{realm}/protocol/openid-connect/token";
 
@@ -51,13 +51,13 @@ namespace Sample.Controllers
 
     public class TokenResponse
     {
-        public string access_token { get; set; }
+        public string? access_token { get; set; }
         public int expires_in { get; set; }
         public int refresh_expires_in { get; set; }
-        public string refresh_token { get; set; }
-        public string token_type { get; set; }
+        public string? refresh_token { get; set; }
+        public string? token_type { get; set; }
         public int not_before_policy { get; set; }
-        public string session_state { get; set; }
-        public string scope { get; set; }
+        public string? session_state { get; set; }
+        public string? scope { get; set; }
     }
 }

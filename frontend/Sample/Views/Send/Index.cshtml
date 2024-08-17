@@ -6,8 +6,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Id Produto</th>
-            <th>Id Usuario</th>
+            <th>Doação</th>
+            <th>Usuário</th>
             <th>Quantidade</th>
             <th>Data Doação</th>
         </tr>
@@ -17,10 +17,10 @@
         {
             <tr>
                 <td>@send.Id</td>
-                <td>@send.IdProduct</td>
-                <td>@send.IdUser</td>
-                <td>@send.Quantity</td>
-                <td>@send.DateTimeDonation.ToShortDateString()</td>
+                <td>@send?.Receive?.Name</td>
+                <td>@send?.User?.Name</td>
+                <td>@send?.Quantity</td>
+                <td>@send?.DateTimeDonation.ToShortDateString()</td>
                 <td>
                     <button onclick="showInPopup('@Url.Action("Edit", new { id = send.Id })','Editar Doação')" type="button" class="btn btn-success">Editar</button>
                     <a href="@Url.Action("Delete", new { id = send.Id })" class="btn btn-danger">Deletar</a>

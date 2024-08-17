@@ -25,7 +25,7 @@
                 <td>@user.Photo</td>
                 <td>@user.Cpf</td>
                 <td>@user.DateOfBirth.ToShortDateString()</td>
-                <td>@user.UserPermissionType</td>
+                <td>@user.UserPermissionTypeEnum</td>
                 <td>
                     <button onclick="showInPopup('@Url.Action("Edit", new { id = user.Id })','Editar Usuário')" type="button" class="btn btn-success">Editar</button>
                     <a href="@Url.Action("Delete", new { id = user.Id })" class="btn btn-danger">Deletar</a>

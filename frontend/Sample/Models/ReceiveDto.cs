@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Sample.Service;
 
 namespace Sample.Models
 {
@@ -8,10 +9,17 @@ namespace Sample.Models
         public string? Name { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public TypeOfDonationEnum TypeOfDonation { get; set; }
+        public TypeOfDonationEnum TypeOfDonationEnum { get; set; }
 
         public int Quantity { get; set; }
-        public DateTime Validity { get; set; }
-        public DateTime DateTimeReceipt { get; set; }
+
+        [JsonConverter(typeof(CustomDateTimeConverter))]
+        public DateTime Validity { get; set; } = DateTime.Now;
+
+        [JsonConverter(typeof(CustomDateTimeConverter))]
+        public DateTime DateTimeReceipt { get; set; } = DateTime.Now;
+
+        public UserDto? User { get; set; }
+        public List<UserDto?> Users { get; set; } = [];
     }
 }

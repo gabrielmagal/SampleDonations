@@ -19,8 +19,15 @@ public class SendEntity extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long idProduct;
-    private Long idUser;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "receive_id", nullable = false)
+    private ReceiveEntity receive;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
     private int quantity;
     private LocalDateTime dateTimeDonation;
 
@@ -29,8 +36,8 @@ public class SendEntity extends PanacheEntityBase {
     {
         var sendDto = new SendDto();
         sendDto.setId(id);
-        sendDto.setIdProduct(idProduct);
-        sendDto.setIdUser(idUser);
+        sendDto.setReceive(receive.toDto());
+        sendDto.setUser(user.toDto());
         sendDto.setQuantity(quantity);
         sendDto.setDateTimeDonation(dateTimeDonation);
         return sendDto;

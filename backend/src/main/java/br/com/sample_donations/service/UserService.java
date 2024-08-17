@@ -49,6 +49,20 @@ public class UserService implements IUserService {
     }
 
     public void remove(Long id) {
-        iUserRepository.remove(id);
+        try
+        {
+            iUserRepository.remove(id);
+        }
+        catch (Exception ex)
+        {
+            var user = iUserRepository.getById(id);
+            int sizeReceives = user.getReceives().size();
+            int sizeSends = user.getSends().size();
+            if (sizeReceives > 0 || sizeSends > 0)
+            {
+                throw new RuntimeException("Não foi possível remover o usuário pois existe(m) " + (sizeReceives + sizeSends)  +" pendencia(s) relacionada(s) a ele.");
+            }
+            throw new RuntimeException("Não foi possível efetuar a remoção. " + ex.getMessage());
+        }
     }
 }

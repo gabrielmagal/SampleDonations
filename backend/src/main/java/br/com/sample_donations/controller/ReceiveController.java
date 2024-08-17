@@ -18,8 +18,6 @@ public class ReceiveController {
     IReceiveService iReceiveService;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public ReceiveDto post(ReceiveDto receiveDto) {
         return iReceiveService.create(receiveDto);
     }

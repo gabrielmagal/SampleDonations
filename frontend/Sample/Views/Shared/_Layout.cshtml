@@ -10,26 +10,26 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sample</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SampleDonations</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Entrar</a>
+                            <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Entrar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Usuário</a>
+                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Usuário</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Receive" asp-action="Index">Recebimento</a>
+                            <a class="nav-link" asp-area="" asp-controller="Receive" asp-action="Index">Recebimento</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Send" asp-action="Index">Envios</a>
+                            <a class="nav-link" asp-area="" asp-controller="Send" asp-action="Index">Envios</a>
                         </li>
                     </ul>
                 </div>
@@ -42,18 +42,21 @@
         </main>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="form-modal">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal fade" id="form-modal" tabindex="-1" aria-labelledby="form-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <h5 class="modal-title p-3 mb-2 bg-dark text-white" style="text-align:center"></h5>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="form-modalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="footer bg-light text-muted border-top">
+        <div class="container text-center">
             &copy; 2024 - Sample - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
@@ -62,6 +65,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
-    @RenderSection("Scripts", required: false)
 </body>
 </html>

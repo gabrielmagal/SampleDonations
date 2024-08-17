@@ -8,13 +8,24 @@
 
 <form asp-action="Edit" method="post" class="form-horizontal">
     <div class="form-group">
-        <label asp-for="IdProduct" class="control-label">IdProduct:</label>
-        <input asp-for="IdProduct" class="form-control" />
+        <label asp-for="Receive.Id" class="control-label" hidden="hidden">Doação Id:</label>
+        <input asp-for="Receive.Id" class="form-control" hidden="hidden" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Receive.Name" class="control-label">Doação:</label>
+        <input asp-for="Receive.Name" class="form-control" readonly="readonly" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="User.Id" class="control-label" hidden="hidden">Usuário Id:</label>
+        <input asp-for="User.Id" class="form-control" hidden="hidden" />
     </div>
     <div class="form-group">
-        <label asp-for="IdUser" class="control-label">IdUser:</label>
-        <input asp-for="IdUser" class="form-control" />
+        <label asp-for="User.Name" class="control-label">Usuário:</label>
+        <input asp-for="User.Name" class="form-control" readonly="readonly" />
     </div>
+
     <div class="form-group">
         <label asp-for="Quantity" class="control-label">Quantity:</label>
         <input asp-for="Quantity" class="form-control" />
@@ -23,6 +34,9 @@
         <label asp-for="DateTimeDonation" class="control-label">Data da doação:</label>
         <input asp-for="DateTimeDonation" type="date" class="form-control" />
     </div>
+
+    <br />
+
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
         <input type="button" value="Cancelar" data-bs-dismiss="modal" class="btn btn-danger" />

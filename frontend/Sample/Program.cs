@@ -1,5 +1,4 @@
 using AspNetCoreHero.ToastNotification;
-using Sample.Controllers;
 using Sample.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +6,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient<AuthController>();
+builder.Services.AddScoped<ToastService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ReceiveService>();
+builder.Services.AddScoped<SendService>();
+
+//builder.Services.AddHttpClient<AuthController>();
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tempo de expiração da sessão
+    options.Cookie.HttpOnly = true; // Evita acesso ao cookie de sessão por JavaScript
+    options.Cookie.IsEssential = true; // Garante que a sessão funcione mesmo sem consentimento de cookies
+});
 
 builder.Services.AddNotyf(config =>
 {
@@ -17,6 +33,8 @@ builder.Services.AddNotyf(config =>
 });
 
 var app = builder.Build();
+
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -33,7 +51,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseMiddleware<TokenMiddleware>();
+//app.UseMiddleware<TokenMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

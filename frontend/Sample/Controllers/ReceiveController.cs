@@ -9,21 +9,22 @@ namespace Sample.Controllers
     public class ReceiveController : Controller
     {
         private readonly INotyfService _notyf;
-        private readonly HttpClient httpClient = new();
-        private AuthenticationService authenticationService = new();
+        private readonly HttpClient _httpClient = new();
+        private readonly ReceiveService _receiveService;
+        private readonly UserService _userService;
 
-        public ReceiveController(INotyfService notyf)
+        public ReceiveController(INotyfService notyf, ReceiveService receiveService, UserService userService)
         {
             _notyf = notyf;
+            _receiveService = receiveService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
             try
             {
-                authenticationService.AddAuthHeaders(httpClient, HttpContext);
-                var receives = await httpClient.GetFromJsonAsync<List<ReceiveDto>>($"http://localhost:8080/recebimento");
-                return View(receives);
+                return View(await _receiveService.GetAll(HttpContext));
             }
             catch (AuthenticationException)
             {
@@ -39,70 +40,46 @@ namespace Sample.Controllers
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            ReceiveDto receiveDto = new();
+            receiveDto.Users = await _userService.GetAll(HttpContext);
+            return View(receiveDto);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(ReceiveDto receiveDto)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-            var response = await httpClient.PostAsJsonAsync($"http://localhost:8080/recebimento", receiveDto);
-            ToastService.ShowToastHttp(_notyf, "Doação recebida com sucesso!", response);
+            await _receiveService.Create(receiveDto, HttpContext, _notyf);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-
-            var receive = await httpClient.GetFromJsonAsync<ReceiveDto>($"http://localhost:8080/recebimento/{id}");
+            var receive = await _receiveService.GetById(id, HttpContext);
             if (receive == null)
             {
                 return NotFound();
             }
-
             return View(receive);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(ReceiveDto receiveDto)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-
-            var receive = await httpClient.GetFromJsonAsync<ReceiveDto>($"http://localhost:8080/recebimento/{receiveDto.Id}");
-            if (receive == null)
-            {
-                return NotFound();
-            }
-
-            receive.Name = receiveDto.Name;
-            receive.TypeOfDonation = receiveDto.TypeOfDonation;
-            receive.Quantity = receiveDto.Quantity;
-            receive.Validity = receiveDto.Validity;
-            receive.DateTimeReceipt = receiveDto.DateTimeReceipt;
-
-            var response = await httpClient.PutAsJsonAsync($"http://localhost:8080/recebimento/{receiveDto.Id}", receive);
-
-            ToastService.ShowToastHttp(_notyf, "Doação alterada com sucesso!", response);
-
+            await _receiveService.Edit(receiveDto, HttpContext, _notyf);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-
-            var receive = await httpClient.GetFromJsonAsync<ReceiveDto>($"http://localhost:8080/recebimento/{id}");
+            var receive = await _receiveService.GetById(id, HttpContext);
             if (receive == null)
             {
                 return NotFound();
             }
 
-            var response = await httpClient.DeleteAsync($"http://localhost:8080/recebimento/{id}");
-
-            ToastService.ShowToastHttp(_notyf, "Doação removida com sucesso!", response);
+            await _receiveService.DeleteById(id, HttpContext, _notyf);
 
             return RedirectToAction("Index");
         }

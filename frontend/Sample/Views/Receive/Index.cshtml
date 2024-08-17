@@ -11,6 +11,7 @@
             <th>Quantidade</th>
             <th>Validade</th>
             <th>Data de Recebimento</th>
+            <th>Doador</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -24,6 +25,7 @@
                 <td>@receive.Quantity</td>
                 <td>@receive.Validity.ToShortDateString()</td>
                 <td>@receive.DateTimeReceipt.ToString("g")</td>
+                <td>@receive.User.Name</td>
                 <td>
                     <button onclick="showInPopup('@Url.Action("Edit", new { id = receive.Id })','Editar Alimento')" type="button" class="btn btn-success">Editar</button>
                     <a href="@Url.Action("Delete", new { id = receive.Id })" class="btn btn-danger">Deletar</a>

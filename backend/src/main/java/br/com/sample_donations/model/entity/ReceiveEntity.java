@@ -24,8 +24,12 @@ public class ReceiveEntity extends PanacheEntityBase {
     private String name;
     private TypeOfDonationEnum typeOfDonationEnum;
     private int quantity;
-    private LocalDate validity;
+    private LocalDateTime validity;
     private LocalDateTime dateTimeReceipt = LocalDateTime.now();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Transient
     public ReceiveDto toDto()
@@ -37,6 +41,7 @@ public class ReceiveEntity extends PanacheEntityBase {
         receiveDto.setQuantity(quantity);
         receiveDto.setValidity(validity);
         receiveDto.setDateTimeReceipt(dateTimeReceipt);
+        receiveDto.setUser(user.toDto());
         return receiveDto;
     }
 }

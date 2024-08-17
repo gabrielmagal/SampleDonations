@@ -4,7 +4,9 @@ import br.com.sample_donations.controller.dto.SendDto;
 import br.com.sample_donations.model.entity.SendEntity;
 import br.com.sample_donations.model.interfaces.IReceiveRepository;
 import br.com.sample_donations.model.interfaces.ISendRepository;
+import br.com.sample_donations.model.interfaces.IUserRepository;
 import br.com.sample_donations.service.interfaces.ISendService;
+import br.com.sample_donations.service.interfaces.IUserService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -19,9 +21,16 @@ public class SendService implements ISendService {
     @Inject
     IReceiveRepository iReceiveRepository;
 
+    @Inject
+    IUserRepository iUserRepository;
+
     public SendDto create(SendDto sendDto)
     {
-        var receive = iReceiveRepository.getById(sendDto.getIdProduct());
+        var receive = iReceiveRepository.getById(sendDto.getReceive().getId());
+        var user = iUserRepository.getById(sendDto.getUser().getId());
+
+        sendDto.setReceive(receive.toDto());
+        sendDto.setUser(user.toDto());
 
         sendDto.setId(null);
         var sendEntity = sendDto.toEntity();
@@ -57,7 +66,7 @@ public class SendService implements ISendService {
     public void update(SendDto sendDto) {
         var sendEntity = iSendRepository.getById(sendDto.getId());
 
-        var receiveEntity = iReceiveRepository.getById(sendDto.getIdProduct());
+        var receiveEntity = iReceiveRepository.getById(sendDto.getReceive().getId());
         receiveEntity.setQuantity(receiveEntity.getQuantity() + sendEntity.getQuantity());
         iReceiveRepository.update(receiveEntity);
 
@@ -71,7 +80,7 @@ public class SendService implements ISendService {
     public void remove(Long id) {
         var sendEntity = iSendRepository.getById(id);
 
-        var receiveEntity = iReceiveRepository.getById(sendEntity.getIdProduct());
+        var receiveEntity = iReceiveRepository.getById(sendEntity.getReceive().getId());
         receiveEntity.setQuantity(receiveEntity.getQuantity() + sendEntity.getQuantity());
         iReceiveRepository.update(receiveEntity);
 

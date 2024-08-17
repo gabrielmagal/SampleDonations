@@ -26,8 +26,8 @@ public class SendRepository implements ISendRepository, PanacheRepositoryBase<Se
 
     public void update(SendEntity sendEntity) {
         var send = getById(sendEntity.getId());
-        send.setIdProduct(sendEntity.getIdProduct());
-        send.setIdUser(sendEntity.getIdUser());
+        send.setReceive(sendEntity.getReceive());
+        send.setUser(sendEntity.getUser());
         send.setQuantity(sendEntity.getQuantity());
         send.setDateTimeDonation(sendEntity.getDateTimeDonation());
         persistAndFlush(send);

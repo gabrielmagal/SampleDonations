@@ -6,7 +6,7 @@ namespace Sample.Service
 {
     public class ToastService
     {
-        public static void ShowToast(INotyfService _notyf, string message, TypeToastEnum typeToastEnum, int time = 8)
+        public async Task ShowToast(INotyfService _notyf, string message, TypeToastEnum typeToastEnum, int time = 8)
         {
             switch (typeToastEnum)
             {
@@ -36,17 +36,34 @@ namespace Sample.Service
             }
         }
 
-        public static void ShowToastHttp(INotyfService _notyf, string messageSuccess, HttpResponseMessage _httpResponseMessage)
+        public async Task ShowToastHttpError(INotyfService _notyf, HttpResponseMessage _httpResponseMessage)
+        {
+            string result = _httpResponseMessage.Content.ReadAsStringAsync().Result;
+
+            if (result.Contains("Constraint Violation"))
+            {
+                var errorResponse = JsonSerializer.Deserialize<ConstraintViolationDto>(result);
+                await ShowToast(_notyf, errorResponse?.violations[0]?.message ?? "Não foi possível realizar a operação.", TypeToastEnum.ERROR);
+            }
+            else
+            {
+                var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(result);
+                var errorMessage = errorResponse?.details?.Split(":").LastOrDefault()?.Trim();
+                await ShowToast(_notyf, errorMessage ?? "Não foi possível realizar a operação.", TypeToastEnum.ERROR);
+            }
+        }
+
+        public async Task ShowToastHttp(INotyfService _notyf, string messageSuccess, HttpResponseMessage _httpResponseMessage)
         {
             if (_httpResponseMessage.IsSuccessStatusCode)
             {
-                ShowToast(_notyf, messageSuccess, TypeToastEnum.SUCCESS);
+                await ShowToast(_notyf, messageSuccess, TypeToastEnum.SUCCESS);
             }
             else
             {
                 var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(_httpResponseMessage.Content.ReadAsStringAsync().Result);
                 var errorMessage = errorResponse?.details?.Split(":").LastOrDefault()?.Trim();
-                ShowToast(_notyf, errorMessage ?? "Não foi possível realizar a operação.", TypeToastEnum.ERROR);
+                await ShowToast(_notyf, errorMessage ?? "Não foi possível realizar a operação.", TypeToastEnum.ERROR);
             }
         }
     }

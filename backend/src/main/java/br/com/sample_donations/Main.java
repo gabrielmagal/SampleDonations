@@ -21,7 +21,7 @@ public class Main {
         public int run(String... args) {
             hashClientSecret.put("doacoesalimenticias", new ClientSecretDto("doacoesalimenticias-backend", "hXyq24462kDN7SIzRiTfgYyXzb4HamPL"));
             hashClientSecret.put("scdoacoes", new ClientSecretDto("scdoacoes-backend", "vyA6fPKioy1BKlFh15IsBE8Fkv3ZbxqF"));
-            hashClientSecret.put("petrodoacoes", new ClientSecretDto("petrodoacoes-backend", "aFW9R4yzLaSwTM6XvbbMiygFblRGhmyd"));
+            hashClientSecret.put("petrodoacoes", new ClientSecretDto("petrodoacoes-backend", "zEbrX0EgGngvYynVAI3RTFSwoA62k1f6"));
             System.out.println("Do startup logic here");
             Quarkus.waitForExit();
             return 0;

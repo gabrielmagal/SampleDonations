@@ -10,6 +10,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,8 +27,14 @@ public class UserEntity extends PanacheEntityBase {
     private String email;
     private String cpf;
     private String photo;
-    private LocalDate dateOfBirth;
+    private LocalDate dateOfBirth = LocalDate.now();
     private UserPermissionTypeEnum userPermissionTypeEnum;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<ReceiveEntity> receives = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<SendEntity> sends = new ArrayList<>();
 
     @Transient
     public UserDto toDto()

@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json;
-using Sample.Controllers;
 using Sample.Models;
 
 namespace Sample.Service
@@ -17,8 +16,8 @@ namespace Sample.Service
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var accessToken = context.Request.Cookies["AccessToken"];
-            var refreshToken = context.Request.Cookies["RefreshToken"];
+            var accessToken = context.Session.GetString("AccessToken");
+            var refreshToken = context.Session.GetString("RefreshToken");
 
             if (!string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshToken))
             {
@@ -27,17 +26,11 @@ namespace Sample.Service
 
                 if (jwtToken != null && jwtToken.ValidTo <= DateTime.UtcNow.AddSeconds(20))
                 {
-                    Console.WriteLine($"AccessToken: {accessToken}");
-                    Console.WriteLine($"RefreshToken: {refreshToken}");
-                    Console.WriteLine($"JWT ValidTo: {jwtToken.ValidTo}");
-                    Console.WriteLine($"JWT Expired: {jwtToken.ValidTo <= DateTime.UtcNow}");
-
-                    var newTokenResponse = await RefreshTokenAsync(refreshToken, context.Request.Cookies["X-Tenant"]);
-
+                    var newTokenResponse = await RefreshTokenAsync(refreshToken, context.Session.GetString("X-Tenant"));
                     if (newTokenResponse != null)
                     {
-                        context.Response.Cookies.Append("AccessToken", newTokenResponse.access_token, new CookieOptions { HttpOnly = true, Secure = true });
-                        context.Response.Cookies.Append("RefreshToken", newTokenResponse.refresh_token, new CookieOptions { HttpOnly = true, Secure = true });
+                        context.Session.SetString("AccessToken", newTokenResponse.access_token);
+                        context.Session.SetString("RefreshToken", newTokenResponse.access_token);
                     }
                     else
                     {
@@ -50,7 +43,7 @@ namespace Sample.Service
             await _next(context);
         }
 
-        private async Task<TokenResponseDto> RefreshTokenAsync(string refreshToken, string realm)
+        private async Task<TokenResponseDto?> RefreshTokenAsync(string? refreshToken, string? realm)
         {
             var keycloakUrl = $"http://localhost:8083/realms/{realm}/protocol/openid-connect/token";
 

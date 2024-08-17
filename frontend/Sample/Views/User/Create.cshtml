@@ -29,11 +29,11 @@
     </div>
     <div class="form-group">
         <label asp-for="DateOfBirth" class="control-label">Data de Nascimento:</label>
-        <input asp-for="DateOfBirth" type="date" class="form-control" />
+        <input asp-for="DateOfBirth" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="UserPermissionType" class="control-label">Permissão:</label>
-        <select asp-for="UserPermissionType" class="form-control">
+        <label asp-for="UserPermissionTypeEnum" class="control-label">Permissão:</label>
+        <select asp-for="UserPermissionTypeEnum" class="form-control">
             @foreach (var item in Enum.GetValues(typeof(UserPermissionTypeEnum)))
             {
                 <option value="@item">@item</option>

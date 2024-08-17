@@ -10,20 +10,23 @@ namespace Sample.Controllers
     {
         private readonly INotyfService _notyf;
         private readonly HttpClient httpClient = new();
-        private AuthenticationService authenticationService = new();
+        private readonly ReceiveService _receiveService;
+        private readonly UserService _userService;
+        private readonly SendService _sendService;
 
-        public SendController(INotyfService notyf)
+        public SendController(INotyfService notyf, ReceiveService receiveService, UserService userService, SendService sendService)
         {
             _notyf = notyf;
+            _receiveService = receiveService;
+            _userService = userService;
+            _sendService = sendService;
         }
 
         public async Task<IActionResult> Index()
         {
             try
             {
-                authenticationService.AddAuthHeaders(httpClient, HttpContext);
-                var sends = await httpClient.GetFromJsonAsync<List<SendDto>>($"http://localhost:8080/entrega");
-                return View(sends);
+                return View(await _sendService.GetAll(HttpContext));
             }
             catch (AuthenticationException)
             {
@@ -39,69 +42,49 @@ namespace Sample.Controllers
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            SendDto sendDto = new()
+            {
+                Users = await _userService.GetAll(HttpContext),
+                Receives = await _receiveService.GetAll(HttpContext)
+            };
+            return View(sendDto);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(SendDto sendDto)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-            var response = await httpClient.PostAsJsonAsync($"http://localhost:8080/entrega", sendDto);
-            ToastService.ShowToastHttp(_notyf, "Doação enviada com sucesso!", response);
+            await _sendService.Create(sendDto, HttpContext, _notyf);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-
-            var send = await httpClient.GetFromJsonAsync<SendDto>($"http://localhost:8080/entrega/{id}");
+            var send = await _sendService.GetById(id, HttpContext);
             if (send == null)
             {
                 return NotFound();
             }
-
             return View(send);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(SendDto sendDto)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-
-            var send = await httpClient.GetFromJsonAsync<SendDto>($"http://localhost:8080/entrega/{sendDto.Id}");
-            if (send == null)
-            {
-                return NotFound();
-            }
-
-            send.IdProduct = sendDto.IdProduct;
-            send.IdUser = sendDto.IdUser;
-            send.Quantity = sendDto.Quantity;
-            send.DateTimeDonation = sendDto.DateTimeDonation;
-
-            var response = await httpClient.PutAsJsonAsync($"http://localhost:8080/entrega/{sendDto.Id}", send);
-
-            ToastService.ShowToastHttp(_notyf, "Doação alterada com sucesso!", response);
-
+            await _sendService.Edit(sendDto, HttpContext, _notyf);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            authenticationService.AddAuthHeaders(httpClient, HttpContext);
-
-            var send = await httpClient.GetFromJsonAsync<ReceiveDto>($"http://localhost:8080/entrega/{id}");
+            var send = await _sendService.GetById(id, HttpContext);
             if (send == null)
             {
                 return NotFound();
             }
 
-            var response = await httpClient.DeleteAsync($"http://localhost:8080/entrega/{id}");
-
-            ToastService.ShowToastHttp(_notyf, "Doação removida com sucesso!", response);
+            await _sendService.DeleteById(id, HttpContext, _notyf);
 
             return RedirectToAction("Index");
         }

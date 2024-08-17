@@ -5,20 +5,23 @@ namespace Sample.Service
 {
     public class AuthenticationService
     {
-        public void AddAuthHeaders(HttpClient httpClient, HttpContext httpContext)
+        public static void AddAuthHeaders(HttpClient httpClient, HttpContext httpContext)
         {
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AddTokenHeader(httpClient, httpContext));
-            httpClient.DefaultRequestHeaders.Add("X-Tenant", AddTenantHeader(httpClient, httpContext));
+            if (!httpClient.DefaultRequestHeaders.Contains("X-Tenant"))
+            {
+                httpClient.DefaultRequestHeaders.Add("X-Tenant", AddTenantHeader(httpClient, httpContext));
+            }
         }
 
-        public string AddTokenHeader(HttpClient httpClient, HttpContext httpContext)
+        public static string AddTokenHeader(HttpClient httpClient, HttpContext httpContext)
         {
-            return httpContext.Request.Cookies["AccessToken"] ?? throw new AuthenticationException("Não foi inserido um token.");
+            return httpContext.Session.GetString("AccessToken") ?? throw new AuthenticationException("Não foi inserido um token.");
         }
 
-        public string AddTenantHeader(HttpClient httpClient, HttpContext httpContext)
+        public static string AddTenantHeader(HttpClient httpClient, HttpContext httpContext)
         {
-            return httpContext.Request.Cookies["X-Tenant"] ?? throw new AuthenticationException("Não foi inserido um tenant.");
+            return httpContext.Session.GetString("X-Tenant") ?? throw new AuthenticationException("Não foi inserido um tenant.");
         }
     }
 }

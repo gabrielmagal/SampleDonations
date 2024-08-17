@@ -19,20 +19,15 @@ import java.time.LocalDateTime;
 public class ReceiveDto {
     private Long id;
 
-    @NotBlank(message = "Nome não pode ser vazio.")
-    @Size(min = 5, max = 40, message = "O nome deve ter um tamanho entre 5 e 40 digitos.")
     private String name;
 
-    @NotNull(message = "O tipo de alimento é obrigatório.")
     private TypeOfDonationEnum typeOfDonationEnum;
 
-    @Min(value = 1, message = "É necessário ao menos 1 item.")
     private int quantity;
 
-    @NotNull(message = "Validade não pode ser vazia.")
-    private LocalDate validity;
-
+    private LocalDateTime validity;
     private LocalDateTime dateTimeReceipt;
+    private UserDto user;
 
     public ReceiveEntity toEntity()
     {
@@ -43,6 +38,7 @@ public class ReceiveDto {
         receive.setQuantity(quantity);
         receive.setValidity(validity);
         receive.setDateTimeReceipt(dateTimeReceipt);
+        receive.setUser(user.toEntity());
         return receive;
     }
 }
