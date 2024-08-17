@@ -21,10 +21,10 @@
             <tr>
                 <td>@receive.Id</td>
                 <td>@receive.Name</td>
-                <td>@receive.TypeOfDonation</td>
+                <td>@receive.TypeOfDonationEnum</td>
                 <td>@receive.Quantity</td>
-                <td>@receive.Validity.ToShortDateString()</td>
-                <td>@receive.DateTimeReceipt.ToString("g")</td>
+                <td>@receive.Validity</td>
+                <td>@receive.DateTimeReceipt</td>
                 <td>@receive.User.Name</td>
                 <td>
                     <button onclick="showInPopup('@Url.Action("Edit", new { id = receive.Id })','Editar Alimento')" type="button" class="btn btn-success">Editar</button>

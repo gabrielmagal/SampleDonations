@@ -13,8 +13,8 @@
         <input asp-for="Name" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="TypeOfDonation" class="control-label">Tipo de doação:</label>
-        <select asp-for="TypeOfDonation" class="form-control">
+        <label asp-for="TypeOfDonationEnum" class="control-label">Tipo de doação:</label>
+        <select asp-for="TypeOfDonationEnum" class="form-control">
             @foreach (var item in Enum.GetValues(typeof(TypeOfDonationEnum)))
             {
                 <option value="@item">@item</option>

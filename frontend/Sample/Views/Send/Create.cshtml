@@ -13,14 +13,14 @@
             <option value="">Selecione um Recebimento</option>
             @foreach (var receive in Model.Receives)
             {
-                <option value="@receive.Id">@receive.Name</option>
+                <option value="@receive?.Id">@receive?.Name</option>
             }
         </select>
         <span asp-validation-for="Receive.Id" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="User.Id" class="control-label">Recebimento:</label>
+        <label asp-for="User.Id" class="control-label">Usuário:</label>
         <select asp-for="User.Id" class="form-control">
             <option value="">Selecione um Recebimento</option>
             @foreach (var receive in Model.Users)
@@ -36,7 +36,7 @@
     </div>
     <div class="form-group">
         <label asp-for="DateTimeDonation" class="control-label">Data da doação:</label>
-        <input asp-for="DateTimeDonation" type="date" class="form-control" />
+        <input asp-for="DateTimeDonation" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Salvar</button>
